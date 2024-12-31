@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproducir Video con Mensaje Final Animado</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: black;
+        }
+
+        video {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        #mensajeFinal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button id="mostrarVideo" style="
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;">Presiona Enter para reproducir</button>
+
+    <video id="videoPlayer" playsinline>
+        <source src="esto quiere que sepas mejor que eres el TONOTO que conoció este año y te desea FELIZ AÑO NUEVO.mp4" type="video/mp4">
+        Tu navegador no soporta el elemento de video.
+    </video>
+
+    <div id="mensajeFinal">Espero que la detones este nuevo año bb xd</div>
+
+    <script>
+        const boton = document.getElementById('mostrarVideo');
+        const videoPlayer = document.getElementById('videoPlayer');
+        const mensajeFinal = document.getElementById('mensajeFinal');
+
+        function reproducirVideo() {
+            boton.style.display = 'none'; // Oculta el botón
+            videoPlayer.style.display = 'block'; // Muestra el video
+            videoPlayer.controls = false; // No muestra controles
+            videoPlayer.play(); // Reproduce el video
+            // Asegura que el sonido se habilite cuando se presiona Enter
+            videoPlayer.muted = false;
+
+            // Intenta poner el video en pantalla completa
+            if (videoPlayer.requestFullscreen) {
+                videoPlayer.requestFullscreen().catch((err) => {
+                    console.log("Error al intentar poner el video en pantalla completa:", err);
+                });
+            } else if (videoPlayer.webkitRequestFullscreen) {
+                videoPlayer.webkitRequestFullscreen();
+            } else if (videoPlayer.msRequestFullscreen) {
+                videoPlayer.msRequestFullscreen();
+            }
+        }
+
+        // Detecta la tecla Enter
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                reproducirVideo();
+            }
+        });
+
+        // También permite activar la reproducción al hacer clic en el botón
+        boton.addEventListener('click', reproducirVideo);
+
+        // Evento para mostrar el mensaje al finalizar el video
+        videoPlayer.addEventListener('ended', function() {
+            videoPlayer.style.display = 'none';
+            mensajeFinal.style.display = 'block';
+        });
+
+        // Cambiar el color de fondo del mensaje cada 1 segundo
+        const colores = ['#FF6347', '#32CD32', '#1E90FF', '#FFD700', '#FF69B4', '#8A2BE2']; // Colores que se alternarán
+        let indiceColor = 0;
+
+        setInterval(() => {
+            if (mensajeFinal.style.display === 'block') {
+                mensajeFinal.style.backgroundColor = colores[indiceColor];
+                indiceColor = (indiceColor + 1) % colores.length; // Cambia al siguiente color y reinicia si llega al final
+            }
+        }, 1000); // Cambiar cada 1 segundo
+    </script>
+</body>
+</html>
